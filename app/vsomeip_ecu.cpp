@@ -13,7 +13,6 @@
  * for other information.
  *******************************************************************************/
 #include "hello.h"
-#include <libvsomeip_ecu.cpp>
 int main() {
     printHello();
     // incrementCounter();

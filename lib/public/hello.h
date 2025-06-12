@@ -14,7 +14,12 @@
  *******************************************************************************/
 #ifndef _HELLO_H_
 #define _HELLO_H_
+#include <iostream>
+#include <vector>
+#include <vsomeip/vsomeip.hpp>
 
 void printHello(void);
+void on_message(const std::shared_ptr<vsomeip::message> &msg);
+void testVsomeip();
 
 #endif /* _HELLO_H_ */

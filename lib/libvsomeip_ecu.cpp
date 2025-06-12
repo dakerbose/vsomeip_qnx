@@ -13,10 +13,14 @@
  * for other information.
  *******************************************************************************/
 #include "public/hello.h"
-#include <iostream>
-#include <vector>
-#include <vsomeip/vsomeip.hpp>
 
+
+#define SERVICE_ID 0x1234
+#define INSTANCE_ID 0x5678
+#define EVENT_ID 0x8778
+#define EVENTGROUP_ID 0x4465
+
+std::shared_ptr<vsomeip::application> app;
 
 void printHello() { 
     std::vector<int> hello;
@@ -30,26 +34,57 @@ void printHello() {
     return;
 }
 
-// Callback function for vsomeip events
-void on_message(const std::shared_ptr<vsomeip::message> &msg) {
-    std::cout << "Received vsomeip message!" << std::endl;
+
+void on_message(const std::shared_ptr<vsomeip::message>& msg) {
+    std::cout << "Received message [" 
+              << std::hex << msg->get_service() << "."
+              << msg->get_instance() << "."
+              << msg->get_method() << "]\n";
+              
+    std::string payload(reinterpret_cast<const char*>(msg->get_payload()->get_data()),
+                       msg->get_payload()->get_length());
+    std::cout << "Payload: " << payload << std::endl;
 }
 
 void testVsomeip() {
-    // Create vsomeip application
-    auto app = vsomeip::runtime::get()->create_application("TestApp");
-
-    // Initialize the application
+    app = vsomeip::runtime::get()->create_application("TestApp");
     if (!app->init()) {
-        std::cerr << "Failed to initialize vsomeip application!" << std::endl;
+        std::cerr << "Failed to initialize application!" << std::endl;
         return;
     }
 
-    // Register a callback for incoming messages
-    app->register_message_handler(0x1234, 0x5678, 0x0001, on_message);
+    // 服务可用性回调
+    app->register_availability_handler(SERVICE_ID, INSTANCE_ID,
+        [&](vsomeip::service_t, vsomeip::instance_t, bool is_available) {
+            std::cout << "Service [" << std::hex << SERVICE_ID << "." << INSTANCE_ID
+                      << "] is " << (is_available ? "available" : "NOT available") << std::endl;
+        std::set<vsomeip::eventgroup_t> eventgroups;
+            eventgroups.insert(EVENTGROUP_ID);
+            if (is_available) {
+                // 在服务端提供事件后，必须显式请求该事件
+                app->request_event(
+                    SERVICE_ID, 
+                    INSTANCE_ID, 
+                    EVENT_ID, 
+                    eventgroups, 
+                    vsomeip::event_type_e::ET_FIELD
+                );
+                
+                // 订阅事件组
+                app->subscribe(SERVICE_ID, INSTANCE_ID, EVENTGROUP_ID);
+                
+                std::cout << "Requested event and subscribed to eventgroup" << std::endl;
+            }
+        });
 
-    // Start the vsomeip application
+    // 注册消息处理 - 必须为事件ID注册
+    app->register_message_handler(SERVICE_ID, INSTANCE_ID, EVENT_ID, on_message);
+    
+    // 请求服务
+    app->request_service(SERVICE_ID, INSTANCE_ID);
+    
+    // 启动应用
     app->start();
-
-    std::cout << "vsomeip application started successfully!" << std::endl;
+    
+    // 保持应用运行以接收消息    app->stop();
 }
