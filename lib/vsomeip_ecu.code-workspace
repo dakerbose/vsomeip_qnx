@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "vsomeip_ecu",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"iostream": "cpp"
+		}
+	}
+}
