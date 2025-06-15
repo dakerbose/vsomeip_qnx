@@ -17,8 +17,13 @@
       "reliable": "30500",
       "events": [
         {
-          "event": "0x8778",
+          "event": "0x1001",
           "eventgroup": "0x4465",
+          "is_field": true
+        },
+        {
+          "event": "0x2001",
+          "eventgroup": "0x5544",
           "is_field": true
         }
       ]

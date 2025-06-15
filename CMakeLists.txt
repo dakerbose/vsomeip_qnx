@@ -14,6 +14,7 @@ include_directories(/home/dakerbose/qnx800/target/qnx/usr/local/include)
 
 add_library(${LIBNAME} STATIC
     ${PROJECT_SOURCE_DIR}/lib/libvsomeip_ecu.cpp)
+# 静态库的文件被链接到可执行文件中 构建的输出就不会有.a 
 target_include_directories(${LIBNAME} PUBLIC ${PROJECT_SOURCE_DIR}/lib)
 
 # Test executable

@@ -12,13 +12,35 @@
  * Development Suite License Guide at [http://licensing.qnx.com/license-guide/]
  * for other information.
  *******************************************************************************/
-#ifndef _HELLO_H_
-#define _HELLO_H_
+#ifndef _BASE_H_
+#define _BASE_H_
 #include <iostream>
 #include <vector>
 #include <vsomeip/vsomeip.hpp>
 
-void printHello(void);
+typedef enum {
+    TYPE_DATA_SPEED,
+    TYPE_DATA_RPM,
+    TYPE_DATA_FUEL,
+    TYPE_DATA_TEMP,
+    TYPE_DATA_LI,
+    TYPE_DATA_RI,
+    TYPE_DATA_UN
+} method_t;
+
+typedef struct s_vehicle_data {
+    char type;
+    int message;
+} s_vehicle_data_t;
+
+#define SERVICE_ID 0x1234
+#define INSTANCE_ID 0x5678
+#define EVENTGROUP_ID_SUBSCRIBE 0x4465
+#define EVENTGROUP_ID_PUBLISH 0x5544
+
+#define EVENT_ID_SUBSCRIBE 0x1001 // 订阅车控端的事件ID
+#define EVENT_ID_PUBLISH 0x2001   // 发布仪表盘的事件ID
+
 void on_message(const std::shared_ptr<vsomeip::message> &msg);
 void testVsomeip();
 

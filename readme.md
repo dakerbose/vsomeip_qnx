@@ -39,6 +39,7 @@ ifconfig
 
 # 然后根据ip即可通过ssh登录(ubuntu和树莓派在一个网段)
 ssh root@10.100.5.63
+密码root
 ```
 
 

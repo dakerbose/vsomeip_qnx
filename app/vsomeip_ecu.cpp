@@ -12,10 +12,8 @@
  * Development Suite License Guide at [http://licensing.qnx.com/license-guide/]
  * for other information.
  *******************************************************************************/
-#include "hello.h"
+#include "base.h"
 int main() {
-    printHello();
-    // incrementCounter();
     testVsomeip();
     return 0;
 }
