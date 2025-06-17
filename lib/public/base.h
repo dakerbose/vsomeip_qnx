@@ -33,8 +33,10 @@ typedef struct s_vehicle_data {
     int message;
 } s_vehicle_data_t;
 
-#define SERVICE_ID 0x1234
-#define INSTANCE_ID 0x5678
+#define SERVICE_ID_SUBSCRIBE 0x1234
+#define INSTANCE_ID_SUBSCRIBE 0x5678
+#define SERVICE_ID_PUBLISH 0x1235
+#define INSTANCE_ID_PUBLISH 0x5679
 #define EVENTGROUP_ID_SUBSCRIBE 0x4465
 #define EVENTGROUP_ID_PUBLISH 0x5544
 
